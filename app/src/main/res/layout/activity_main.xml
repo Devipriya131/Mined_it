@@ -1,147 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@color/backgnd"
-    >
 
-<androidx.constraintlayout.widget.ConstraintLayout
 
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgnd"
+    android:visibility="visible"
+    android:id="@+id/custlayout"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView1"
-        style="@style/titletxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp">
 
-        android:layout_marginEnd="10dp"
-
-        android:text="High Score: "
-        app:layout_constraintEnd_toStartOf="@+id/txtScore"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtScore"
-        style="@style/titletxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="24dp"
-        android:text="xxx"
-        android:textAlignment="viewStart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageButton
-        android:id="@+id/btnHelp"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:background="#545050"
-        android:backgroundTint="#403A3A"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/info" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="188dp"
-        android:layout_height="166dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnHelp"
-        app:srcCompat="@drawable/pong" />
-
-    <ImageButton
-        android:id="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_marginTop="28dp"
-        android:background="@color/backgnd"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.623"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rg2"
-        app:srcCompat="@drawable/startbtn" />
-
-    <TextView
-        android:id="@+id/textView"
-        style="@style/footertxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="4dp"
-        android:text="Made by Dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-
-    <RadioGroup
-        android:id="@+id/rg1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:checkedButton="@id/rb1"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2">
-
-        <RadioButton
-            android:id="@+id/rb1"
-            style="@style/rbText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="One Player" />
+            android:layout_weight="1"
+            android:gravity="right"
+            android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/rb2"
-            style="@style/rbText"
+
+
+            <TextView
+                android:id="@+id/textView1"
+                style="@style/titletxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="High Score: " />
+
+            <TextView
+                android:id="@+id/txtScore"
+                style="@style/titletxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="24dp"
+                android:text="xxx"
+                android:textAlignment="viewStart" />
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Com Vs Player"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </RadioGroup>
+            android:layout_weight="2"
+            android:gravity="center">
 
-    <RadioGroup
-        android:id="@+id/rg2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:checkedButton="@id/rbmode1"
-        app:layout_constraintStart_toEndOf="@+id/rg1"
-        app:layout_constraintTop_toTopOf="@+id/imageView2">
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="1dp"
+                app:srcCompat="@drawable/pong" />
 
-        <RadioButton
-            android:id="@+id/rbmode1"
-            style="@style/rbText"
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Easy" />
+            android:layout_gravity="center_vertical"
+            android:layout_weight="4"
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
 
-        <RadioButton
-            android:id="@+id/rbmode3"
-            style="@style/rbText"
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="New Game" />
+
+            <Button
+                android:id="@+id/btnhelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Help" />
+
+            <Button
+                android:id="@+id/btnsetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Settings" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rglinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hard"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_weight="2"
+            android:background="@drawable/rectbg"
+            android:paddingTop="5dp"
+            android:gravity="top"
+            android:orientation="vertical"
+            android:visibility="visible">
 
-    </RadioGroup>
+            <RadioGroup
+                android:id="@+id/rg1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:checkedButton="@id/rb1"
+                android:gravity="center"
+                android:paddingLeft="3dp"
 
+                android:paddingBottom="10dp">
 
+                <RadioButton
+                    android:id="@+id/rb1"
+                    style="@style/rbText"
+                    android:layout_width="match_parent"
+                    android:text="  Level 1  " />
+
+                <RadioButton
+                    android:id="@+id/rb2"
+                    style="@style/rbText"
+                    android:layout_width="match_parent"
+                    android:text="  Level 2  " />
+
+                <RadioButton
+                    android:id="@+id/rb3"
+                    style="@style/rbText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="  Level 3  " />
+            </RadioGroup>
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="@style/RatingBar"
+                android:layout_width="190dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:numStars="5"
+                android:paddingLeft="40dp"
+                android:rating="1"
+                android:stepSize="1"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom"
+            android:layout_weight="3"
+  >
+
+            <TextView
+                android:id="@+id/textView"
+                style="@style/footertxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="0dp"
+                android:text="Made by Dp"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>

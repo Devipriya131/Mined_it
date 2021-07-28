@@ -7,5 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="popup">#E1EEF0</color>
     <color name="backgnd">#FFFFFF</color>
+    <color name="txtClr">#1C2C85</color>
 </resources>
