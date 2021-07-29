@@ -232,6 +232,7 @@ public class gameView extends SurfaceView
         }
 
         @SuppressLint("ResourceAsColor")
+        //drawing board every second
         public void setBoard()
         {
             paint.setColor(Color.BLACK);
