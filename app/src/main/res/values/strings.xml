@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Mined it</string>
 
     <string-array name="difficulty">
         <item>Easy</item>

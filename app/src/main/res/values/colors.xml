@@ -10,4 +10,5 @@
     <color name="popup">#E1EEF0</color>
     <color name="backgnd">#FFFFFF</color>
     <color name="txtClr">#1C2C85</color>
+    <color name="mineClr">#0027FF</color>
 </resources>

@@ -4,37 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/rel1"
-    android:padding="2dp"
+
     android:background="@color/popup"    >
-    <Button
+
+    <ImageButton
         android:id="@+id/btnclose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:text="Close"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:padding="0dp"
+        android:src="@drawable/info"
+        android:text="Close" />
 
     <TextView
         android:id="@+id/tv"
         style="@style/helptxt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+
+
+        android:padding="25sp"
         android:scrollbars="vertical"
-        android:text="\nRules
-
-The board is divided into cells, with mines randomly distributed. To win, you need to open all the cells. The number on a cell shows the number of mines adjacent to it. Using this information, you can determine cells that are safe, and cells that contain mines. Cells suspected of being mines can be marked with a flag using the right mouse button.
-\n
-To start a new game, you can click on the happy face at the top of the board or use the space bar. The remaining number of mines is displayed in the left corner, and the game timer is displayed in the right corner.
-Chording\n
-
-When a number has the correct amount of flags, you can click on the number to open all the cells around it. This is called a chord because in older versions it required pressing two buttons, left + right, at the same time (can be changed in settings). Using chords greatly reduces unnecessary clicks, and is the foundation of efficient gameplay. Rules
-
-The board is divided into cells, with mines randomly distributed. To win, you need to open all the cells.
-\nThe number on a cell shows the number of mines adjacent to it. Using this information, you can determine cells that are safe, and cells that contain mines. \nCells suspected of being mines can be marked with a flag using the right mouse button.
-\n
-To start a new game, you can click on the happy face at the top of the board or use the space bar. The remaining number of mines is displayed in the left corner, and the game timer is displayed in the right corner.
-Chording\n"
-
-
-        android:padding="25sp" />
+        android:text="" />
 </RelativeLayout>

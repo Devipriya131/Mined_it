@@ -79,18 +79,23 @@
             android:paddingRight="40dp">
 
             <Button
+                style="@style/CustomButtonStyle"
                 android:id="@+id/btn"
+                android:layout_marginBottom="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="New Game" />
 
             <Button
+                android:layout_marginBottom="15dp"
+                style="@style/CustomButtonStyle"
                 android:id="@+id/btnhelp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Help" />
 
             <Button
+                style="@style/CustomButtonStyle"
                 android:id="@+id/btnsetting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,7 +106,7 @@
             android:id="@+id/rglinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:background="@drawable/rectbg"
             android:paddingTop="5dp"
             android:gravity="top"
@@ -116,8 +121,7 @@
                 android:checkedButton="@id/rb1"
                 android:gravity="center"
                 android:paddingLeft="3dp"
-
-                android:paddingBottom="10dp">
+>
 
                 <RadioButton
                     android:id="@+id/rb1"
@@ -157,7 +161,7 @@
             android:layout_height="wrap_content"
             android:gravity="bottom"
             android:layout_weight="3"
-  >
+            >
 
             <TextView
                 android:id="@+id/textView"

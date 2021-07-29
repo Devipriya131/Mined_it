@@ -7,8 +7,11 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,15 +43,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-        ll =(LinearLayout) findViewById(R.id.rglinear);
-            ll.setVisibility(View.INVISIBLE);
+        setVisible();
         clickPlay();
         showScore();
         popup();
     }
 
-public void popup()
+    @Override
+    protected void onResume() {
+        super.onResume();
+      //  setVisible();
+
+    }
+
+    public void setVisible()
+    {
+        ll =(LinearLayout) findViewById(R.id.rglinear);
+        ll.setVisibility(View.INVISIBLE);
+    }
+
+    //for help
+    public void popup()
 {
     ConstraintLayout rel = (ConstraintLayout) findViewById(R.id.custlayout) ;
     Button but = (Button) findViewById(R.id.btnhelp);
@@ -57,28 +74,41 @@ public void popup()
         @Override
         public void onClick(View v) {
 
+            Display display = getWindowManager().getDefaultDisplay();
+
+            // Load the resolution into a Point object
+            Point size = new Point();
+
+            display.getSize(size);
             LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
             View custview = inflater.inflate(R.layout.popup, null);
             popUp = new PopupWindow(custview, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+            TextView tv = custview.findViewById(R.id.tv);
+            tv.setText(Html.fromHtml("<br><br><br><br><u><b>Rules:</b></u><br><br>" +
+                    "You will get one point for stepping into every non-mine tile.<br><br>" +
+                    "And will be losing the game when stepped into the mine.<br><br>"  +
+                    "In level 3, the number of mines in the neighbouring tiles are revealed on the tile you choose, which can be used to track the mines and play the game.<br><br>" +
+                   "<u><b>Number of Mines:</b></u><br>" +
+                    "<ol>" +
+                    "<li>&nbsp;Level 1: 10 mines</li>" +
+                    "<li>&nbsp;Level 2: 13 mines</li>" +
+                    "<li>&nbsp;Level 3: 3, 6, 9, 12, 15 mines as per difficulty.</li><br>" ));
 
-            Button btnclose =  custview.findViewById(R.id.btnclose);
+
+
+                    ImageButton btnclose =  custview.findViewById(R.id.btnclose);
                                    btnclose.setOnClickListener(new View.OnClickListener() {
                                        @Override
                                        public void onClick(View v) {
                                            popUp.dismiss();
                                        }
                                    });
-                                   popUp.showAtLocation(rel, Gravity.NO_GRAVITY, 10, 100);
-                                   //popUp.update(10, 10, 700, 980);
+                                   popUp.showAtLocation(rel, Gravity.NO_GRAVITY, 10, 10);
+                                   popUp.update(50, 50, size.x-100, size.y-100);
                                }});
+    }
 
-
-
-}
-
-
-
-
+    //listener for radio button and other buttons in the activity
     public void clickPlay()
     {
         btnPlay = (Button) findViewById(R.id.btn);
@@ -134,6 +164,7 @@ public void popup()
         score.setText(String.valueOf(highScore));
     }
 
+    //get te level details for passing it to next screen
     public void getLevel()
     {
         rg = (RadioGroup) findViewById(R.id.rg1);

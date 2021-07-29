@@ -1,26 +1,31 @@
 package com.example.myapplication;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.VibrationEffect;
 import android.service.quicksettings.Tile;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.TextView;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +35,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.IntStream;
+
+import tyrantgit.explosionfield.ExplosionField;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -45,9 +52,10 @@ public class gameView extends SurfaceView
     Paint paint = new Paint();
     Paint paint1 = new Paint();
     Paint paint2 = new Paint();
+    String scoreStr;
     private Drawable mCustomImage;
     SurfaceHolder surf;
-    Thread gameThread=null;
+
 
     public gameView(Context context) {
         super(context);
@@ -77,15 +85,14 @@ public class gameView extends SurfaceView
     private class UpdateViewRunnable implements Runnable {
         public void run()
         {
+
             drawCanvas();
-            if(flagClick==1)
-            {
-                secondsPassed++;
+            if(flagClick==1) {
+                secondsPassed++; //when user clicks on the board start the timer
             }
             if(flagEnd>=1)
-            {   flagEnd++;   }
-            //Log.d("Ichidu timeru", String.valueOf(secondsPassed));
-            if(updateView) {
+            {   flagEnd++;   } //flagend is 1 if game ends and increments till 7 and closes the window
+             if(updateView) {
                 postDelayed(this, 1000);
             }
         }
@@ -115,11 +122,10 @@ public class gameView extends SurfaceView
         if (surf.getSurface().isValid()) {
             // Lock the mCanvas ready to draw
             mcanvas = surf.lockCanvas();
-            Log.d("First", "Ok pa");
             mcanvas.drawColor(Color.WHITE);
-            if(board==null)
+            if(board==null)//setup board
             {
-                Log.d("First", "NO pa");
+
                 getProperty();
                 xCanvas = Float.valueOf(mcanvas.getWidth());
                 yCanvas = Float.valueOf(mcanvas.getHeight());
@@ -128,32 +134,28 @@ public class gameView extends SurfaceView
 
                 paint.setStyle(Paint.Style.STROKE);
                 paint.setStrokeWidth(10f);
-                //mcanvas.drawRect(50,50,100,100, paint);
-                board.setMine(mine);
+
+                board.setMine(mine); //setup mine
                 board.setBoard();
                 if(level==3) {
-                    board.setNeighbourMine();
+                    board.setNeighbourMine(); //calculate neighbour mine count if level is 3
                 }
             }
 
             else {
-                Log.d("First", "Loosu pa");
                 board.setBoard();
-            }            Log.d("ondraw","testing");
-            if(flagEnd>=1) {
-                if (flagClickMine == 1) {
-                    endGame("Better luck nekcht time, hehe you idiot!");
-                } else {
-                    endGame("You've won pa, but you will not the next time");
-                }
             }
-            paint1.setColor(Color.BLACK);
-            mcanvas.drawRect((xCanvas-2*board.tileSize), board.boardRect.top-board.tileSize, xCanvas, board.boardRect.top, paint1);
-            //setTimer();
+            if(flagEnd>=1) {
+                endGame();
+            }
+
+            setTimer(); //Display timer
             paint2.setColor(Color.BLACK);
-            paint2.setTextSize(50);
+            paint2.setTextSize(35);
+            //SHow number of mine and score
             paint2.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-            mcanvas.drawText("#Mine: " + String.valueOf(mine), 20, ((board.boardRect.top-30)), paint2);
+            scoreStr = "#Mine: " + String.valueOf(mine) + "    Score: " + String.valueOf(score);
+            mcanvas.drawText(scoreStr, 20, ((board.boardRect.top-25)), paint2);
             surf.unlockCanvasAndPost(mcanvas);
         }
     }
@@ -165,25 +167,32 @@ public class gameView extends SurfaceView
             xClick = event.getX();
             yClick = event.getY();
             switch (event.getAction()) {
+                //if user touches the board, find which tile and do appropriate action
                 case MotionEvent.ACTION_UP: {
                     if (board.boardRect.contains(xClick, yClick)) {
                         flagClick = 1;
                         iClick = Integer.valueOf((int) (xClick / board.tileSize));
                         jClick = Integer.valueOf((int) ((yClick - board.boardRect.top) / board.tileSize));
-                        board.tile[iClick][jClick].isRevealed = true;
 
+                        //if clicked on mine, vibrate and reveal all other mines
                         if (board.tile[iClick][jClick].isMine) {
                             flagEnd = 1;
                             flagClickMine = 1;
                             flagClick = 0;
+                            setVibrate();
                         } else {
-                            score += 1;
-                            revealed++;
+                            //if clicked on non-mine tile, make it as revealed
+                            if(!board.tile[iClick][jClick].isRevealed) {
+                                score += 1;
+                                revealed++;
+                            }
+                            //if all non mine tiles revealed, end the game
                             if (revealed == (board.grid * board.grid) - board.mineCount) {
                                 flagEnd = 1;
                                 flagClick = 0;
                             }
                         }
+                        board.tile[iClick][jClick].isRevealed = true;
                         Log.d("First", "dc before");
                         drawCanvas();
                         Log.d("First", "dc after");
@@ -195,6 +204,7 @@ public class gameView extends SurfaceView
         return true;
     }
 
+    //Class for board
     public class clsBoard
     {
         public Integer grid, mineCount, mineInstant;
@@ -219,6 +229,7 @@ public class gameView extends SurfaceView
             tile = new clsTile[grid][grid];
         }
 
+        @SuppressLint("ResourceAsColor")
         public void setBoard()
         {
             paint.setColor(Color.BLACK);
@@ -247,13 +258,11 @@ public class gameView extends SurfaceView
                             revealMine(leftTile, topTile);
                         }
                         else {
-
-                            //paint1.setColor(Color.WHITE);
-                            //mcanvas.drawRect(leftTile + 10, topTile + 10, leftTile + tileSize - 10, topTile + tileSize - 10, paint1);
-                            if (level == 3) {
-                                paint2.setColor(Color.RED);
-                                paint2.setTextSize(80);
-                                mcanvas.drawText(String.valueOf(board.tile[i][j].neighbourMines), (leftTile + 10 +this.tileSize/4), (topTile + 10 + this.tileSize/2), paint2);
+                            //if level is 3 show neighbour mine count
+                             if (level == 3) {
+                                paint2.setColor(R.color.mineClr);
+                                paint2.setTextSize(60);
+                                mcanvas.drawText(String.valueOf(board.tile[i][j].neighbourMines), (leftTile + 10 +this.tileSize/4), (topTile + 20 + this.tileSize/2), paint2);
                             }
                         }
                     }
@@ -264,19 +273,18 @@ public class gameView extends SurfaceView
             //}
         }
 
+        //show mine image
         public void revealMine(Float leftTile, Float topTile)
         {
             Rect rect = new Rect(Integer.valueOf((int) (leftTile + 10)), Integer.valueOf((int) (topTile + 10)), Integer.valueOf((int) (leftTile + tileSize - 10)), Integer.valueOf((int) (topTile + tileSize - 10)));
-            //RectF rect = new RectF(Math.ceil(leftTile + 10) + 10, Math.ceil(topTile + 10) , Math.floor(topTile + tileSize - 10), Math.floor(topTile + tileSize - 10));
-            //Log.d("test", String.valueOf(rect.top) + "," +
-              //      String.valueOf(rect.left) + "," +
-              //      String.valueOf(minePos[i])
-            //);
+
             mCustomImage = getResources().getDrawable(R.drawable.mine);
             mCustomImage.setBounds(rect);
             mCustomImage.draw(mcanvas);
         }
 
+        //setup mine, hardcoded for level 1, for other level its randomly generated
+        //minecount is based on the level and difficulty
         public void setMine(Integer mineCount)
         {
             this.minePos = new int[mineCount];
@@ -312,6 +320,7 @@ public class gameView extends SurfaceView
             }
         }
 
+        //calculate neighbour mine count
         public void setNeighbourMine()
         {
             Integer jStart=-1, jEnd = -1, isTop=0, isBottom=0;
@@ -376,6 +385,7 @@ public class gameView extends SurfaceView
         }
     }
 
+    //TIle class
     public class clsTile
     {
         Float size, xTile, yTile;
@@ -391,6 +401,7 @@ public class gameView extends SurfaceView
             this.isRevealed = false;
         }
     }
+
 
     public void setDefault()
     {
@@ -408,35 +419,46 @@ public class gameView extends SurfaceView
         }
     }
 
-    /*public void clickMine()
-    {
 
-        Intent intentCanva = new Intent((Activity) getContext(), MainActivity.class);
-        intentCanva.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        getContext().startActivity(intentCanva);
-    }*/
-
-    private void endGame(String alertText)
+    //SHow respective image based on if user lost or won, and explode the image
+    private void endGame()
     {
-        if(flagEnd==9) {
+        Rect rect = new Rect(Integer.valueOf((int) (board.boardRect.left+50)), Integer.valueOf((int) (board.boardRect.bottom+50)), Integer.valueOf((int) (xCanvas-50)), Integer.valueOf((int) (yCanvas-100)));
+        if((flagClickMine==1)) {
+            mCustomImage = getResources().getDrawable(R.drawable.oops);
+        }
+        else{
+            mCustomImage = getResources().getDrawable(R.drawable.congrats);
+        }
+
+        mCustomImage.setBounds(rect);
+        mCustomImage.draw(mcanvas);
+
+        if(flagEnd>=1){
+            //rect = new Rect(Integer.valueOf((int) (board.boardRect.left+50)), Integer.valueOf((int) (board.boardRect.bottom+50)), Integer.valueOf((int) (xCanvas-50)), Integer.valueOf((int) (yCanvas-100)));
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.oops);
+            RectF rectF = board.boardRect;
+            rectF.round(rect);
+            final ExplosionField explosionField = ExplosionField.attach2Window((Activity) getContext());
+            explosionField.explode(bm, rect, 200, 7000);
+        }
+        if(flagEnd==7) {
             storeScore();
-
             Intent intentCanva = new Intent((Activity) getContext(), MainActivity.class);
             intentCanva.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             getContext().startActivity(intentCanva);
         }
-        paint2.setColor(Color.BLACK);
-        paint2.setTextSize(40);
-        mcanvas.drawText(alertText, 100, ((board.boardRect.top/2)+board.boardRect.bottom), paint2);
-
     }
 
+    //called first time to get the level and difficulty
     public void getProperty()
     {
         Integer diff = ((Activity)getContext()).getIntent().getIntExtra("diff", 1);
         level = ((Activity)getContext()).getIntent().getIntExtra("level", 1);
-        if((level==2)||(level==1))
+        if(level==1)
         {  mine = 10;  }
+        else if((level==2))
+        {  mine=13;    }
         else {
             mine = 3*(diff);
         }
@@ -459,20 +481,22 @@ public class gameView extends SurfaceView
 
     public void setTimer()
     {
-        if (surf.getSurface().isValid()) {
-            // Lock the mCanvas ready to draw
-            mcanvas = surf.lockCanvas();
-
-            paint2.setColor(Color.RED);
-            //paint2.setTypeface(Typeface.create("Arial", Typeface.BOLD));
+            paint2.setColor(Color.BLACK);
+            paint2.setTypeface(Typeface.create("Odyssey", Typeface.NORMAL));
             int min = (int) (secondsPassed / 60);
             int sec = (int) ((secondsPassed) % 60);
-            paint2.setTextSize(40);
-            mcanvas.drawText(Integer.toString(min) + ":" + Integer.toString(sec), (xCanvas - 2 * board.tileSize), 40, paint2);
-            //paint1.setColor(Color.BLACK);
-            //mcanvas.drawRect((xCanvas-2*board.tileSize), board.boardRect.top-board.tileSize, xCanvas, board.boardRect.top, paint1);
-            surf.unlockCanvasAndPost(mcanvas);
-        }
+            paint2.setTextSize(60);
+            mcanvas.drawText(String.format ("%02d", min) + ":" + String.format ("%02d", sec), (xCanvas - 2 * board.tileSize+10), board.boardRect.top-25, paint2);
+    }
 
+    public void setVibrate() {
+        final Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        final VibrationEffect vibrationEffect1;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            vibrationEffect1 = VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE);
+            vibrator.cancel();
+            vibrator.vibrate(vibrationEffect1);
+        }
     }
 }
+
