@@ -151,7 +151,7 @@ public class gameView extends SurfaceView
 
             setTimer(); //Display timer
             paint2.setColor(Color.BLACK);
-            paint2.setTextSize(35);
+            paint2.setTextSize(50);
             //SHow number of mine and score
             paint2.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             scoreStr = "#Mine: " + String.valueOf(mine) + "    Score: " + String.valueOf(score);
