@@ -180,6 +180,7 @@ public class gameView extends SurfaceView
                             flagClickMine = 1;
                             flagClick = 0;
                             setVibrate();
+                            storeScore();
                         } else {
                             //if clicked on non-mine tile, make it as revealed
                             if(!board.tile[iClick][jClick].isRevealed) {
@@ -190,6 +191,7 @@ public class gameView extends SurfaceView
                             if (revealed == (board.grid * board.grid) - board.mineCount) {
                                 flagEnd = 1;
                                 flagClick = 0;
+                                storeScore();
                             }
                         }
                         board.tile[iClick][jClick].isRevealed = true;
@@ -207,11 +209,11 @@ public class gameView extends SurfaceView
     //Class for board
     public class clsBoard
     {
-        public Integer grid, mineCount, mineInstant;
+        public Integer grid, mineCount;
         int minePos[];
         ArrayList<Integer> cellNos;
         Float xBoard, yBoard, tileSize;
-        clsTile[][] tile, tileFill ;
+        clsTile[][] tile ;
         RectF boardRect;
 
         public clsBoard(Float xCanvas, Float yCanvas, Integer mine)
@@ -268,9 +270,6 @@ public class gameView extends SurfaceView
                     }
                 }
             }
-            //if(flagClickMine==1) {
-              //  endGame("Oops! You stepped on a mine :(\n Better luck next time!");
-            //}
         }
 
         //show mine image
@@ -409,12 +408,11 @@ public class gameView extends SurfaceView
 
         for(int i=0; i<gridCount; i++)
         {
-            for(int j=0; j<gridCount; j++)
-            {
-                 board.tile[i][j]=new clsTile();
-                 board.tile[i][j].xTile = i*board.tileSize;
-                 board.tile[i][j].yTile = j*board.tileSize + board.boardRect.top;
-                 //Log.d("Coord",String.valueOf (board.tile[i][j].xTile) + " , " + String.valueOf (board.tile[i][j].yTile));
+            for(int j=0; j<gridCount; j++) {
+                board.tile[i][j] = new clsTile();
+                board.tile[i][j].xTile = i * board.tileSize;
+                board.tile[i][j].yTile = j * board.tileSize + board.boardRect.top;
+
             }
         }
     }
@@ -435,7 +433,6 @@ public class gameView extends SurfaceView
         mCustomImage.draw(mcanvas);
 
         if(flagEnd>=1){
-            //rect = new Rect(Integer.valueOf((int) (board.boardRect.left+50)), Integer.valueOf((int) (board.boardRect.bottom+50)), Integer.valueOf((int) (xCanvas-50)), Integer.valueOf((int) (yCanvas-100)));
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.oops);
             RectF rectF = board.boardRect;
             rectF.round(rect);
@@ -443,7 +440,6 @@ public class gameView extends SurfaceView
             explosionField.explode(bm, rect, 200, 7000);
         }
         if(flagEnd==7) {
-            storeScore();
             Intent intentCanva = new Intent((Activity) getContext(), MainActivity.class);
             intentCanva.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             getContext().startActivity(intentCanva);

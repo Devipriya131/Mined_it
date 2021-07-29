@@ -46,16 +46,21 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         setVisible();
-        clickPlay();
         showScore();
+        clickPlay();
         popup();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-      //  setVisible();
+    protected void onRestart() {
+        showScore();
+        super.onRestart();
+    }
 
+    @Override
+    protected void onResume() {
+        showScore();
+        super.onResume();
     }
 
     public void setVisible()

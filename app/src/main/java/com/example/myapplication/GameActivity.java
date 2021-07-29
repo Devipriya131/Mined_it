@@ -16,4 +16,10 @@ public class GameActivity extends AppCompatActivity {
         setContentView(gameview);
         // setContentView(R.layout.gameactivity);
     }
+
+   /*@Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
+    }*/
 }
