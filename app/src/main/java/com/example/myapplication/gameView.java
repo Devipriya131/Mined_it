@@ -53,6 +53,7 @@ public class gameView extends SurfaceView
     Paint paint1 = new Paint();
     Paint paint2 = new Paint();
     String scoreStr;
+    Rect rectRefresh;
     private Drawable mCustomImage;
     SurfaceHolder surf;
 
@@ -149,6 +150,11 @@ public class gameView extends SurfaceView
                 endGame();
             }
 
+            rectRefresh = new Rect(Integer.valueOf((int) (xCanvas-120)),(30), Integer.valueOf((int) (xCanvas-30)), (120));
+            mCustomImage = getResources().getDrawable(R.drawable.refresh);
+            mCustomImage.setBounds(rectRefresh);
+            mCustomImage.draw(mcanvas);
+
             setTimer(); //Display timer
             paint2.setColor(Color.BLACK);
             paint2.setTextSize(50);
@@ -169,6 +175,14 @@ public class gameView extends SurfaceView
             switch (event.getAction()) {
                 //if user touches the board, find which tile and do appropriate action
                 case MotionEvent.ACTION_UP: {
+                    if(rectRefresh.contains(Math.round(xClick) , Math.round(yClick)))
+                    {
+                        Activity activity = (Activity) getContext();
+                        Intent intent = activity.getIntent();
+                        activity.finish();
+                        activity.startActivity(intent);
+                    }
+
                     if (board.boardRect.contains(xClick, yClick)) {
                         flagClick = 1;
                         iClick = Integer.valueOf((int) (xClick / board.tileSize));
